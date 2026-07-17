@@ -1,0 +1,417 @@
+<style>
+  :root{
+    --sky:#2E86C1; --sky-deep:#164468; --sky-pale:#EAF4FC; --sky-mid:#CFE7F8;
+    --gold:#E0A63A; --gold-deep:#B9791E; --gold-pale:#FFF3D9;
+    --coral:#F2734A;
+    --white:#FFFFFF; --ink:#1E2A33; --ink-soft:#6B7A84; --line:#E7EEF3;
+    --sun:#F6BE3E;
+    --shadow:0 10px 26px rgba(27,79,114,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:'Plus Jakarta Sans',sans-serif; color:var(--ink); background:var(--sky-pale); padding-bottom:96px; -webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Fraunces',serif;}
+  a{text-decoration:none;}
+  button{font-family:inherit;}
+
+  .hero{
+    background:linear-gradient(160deg, var(--sky), var(--sky-deep));
+    padding:16px 20px 78px; border-radius:0 0 30px 30px; color:var(--white);
+    position:relative; overflow:hidden;
+  }
+  .back-btn{display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:600; color:rgba(255,255,255,0.9); position:relative; z-index:2;}
+  .hero-title-row{position:relative; z-index:2; margin-top:14px;}
+  .hero-title{font-size:22px; font-weight:600; margin:0 0 4px;}
+  .hero-sub{font-size:12.5px; opacity:0.85;}
+  .hero-illust{position:absolute; top:-10px; right:-6px; width:150px; height:150px; z-index:1; opacity:0.95;}
+
+  .wrap{max-width:640px; margin:0 auto; padding:0 16px;}
+
+  .monthnav-float{margin-top:-58px; position:relative; z-index:5;}
+  .monthnav{
+    background:var(--white); border-radius:20px; box-shadow:var(--shadow);
+    display:flex; align-items:center; justify-content:space-between; padding:10px 8px;
+  }
+  .mn-btn{
+    width:38px; height:38px; border-radius:50%; border:none; background:var(--sky-pale);
+    color:var(--sky-deep); font-size:17px; display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition:background .15s;
+  }
+  .mn-btn:hover{background:var(--sky-mid);}
+  .mn-btn:disabled{opacity:0.3; cursor:default;}
+  .mn-center{text-align:center;}
+  .mn-month{font-size:16.5px; font-weight:700; color:var(--sky-deep); font-family:'Fraunces',serif;}
+  .mn-sem{display:inline-block; margin-top:2px; font-size:10px; font-weight:700; padding:2px 9px; border-radius:999px;}
+  .mn-sem.ganjil{background:var(--sky-pale); color:var(--sky-deep);}
+  .mn-sem.genap{background:var(--gold-pale); color:var(--gold-deep);}
+
+  .chip-scroll{display:flex; gap:8px; overflow-x:auto; padding:14px 2px 4px; scroll-snap-type:x proximity;}
+  .chip-scroll::-webkit-scrollbar{height:4px;}
+  .chip-scroll::-webkit-scrollbar-thumb{background:#C7DCEC; border-radius:10px;}
+  .m-chip{
+    scroll-snap-align:start; flex-shrink:0; font-size:12px; font-weight:700; padding:8px 15px;
+    border-radius:999px; background:var(--white); border:1.5px solid var(--line); color:var(--ink-soft); cursor:pointer;
+  }
+  .m-chip.active{background:var(--sky); border-color:var(--sky); color:var(--white);}
+
+  .cal-card{background:var(--white); border-radius:22px; box-shadow:var(--shadow); padding:16px 14px 10px; margin-top:14px;}
+  .cal-dow{display:grid; grid-template-columns:repeat(7,1fr); margin-bottom:6px;}
+  .cal-dow span{text-align:center; font-size:11px; font-weight:700; color:var(--ink-soft); padding:4px 0;}
+  .cal-dow span.sun{color:#E0544A;}
+  .cal-dow span.sat{color:var(--sky);}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px 3px;}
+  .cal-cell{aspect-ratio:1; display:flex; align-items:center; justify-content:center; position:relative;}
+  .cal-date{
+    width:100%; height:100%; max-width:42px; max-height:42px; margin:0 auto; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600; color:var(--ink);
+    cursor:default; position:relative; border:none; background:none; font-family:inherit;
+  }
+  .cal-date.sun-c{color:#E0544A;}
+  .cal-date.sat-c{color:var(--sky-deep);}
+  .cal-date.ev{cursor:pointer; background:var(--sky-pale); color:var(--sky-deep); font-weight:700;}
+  .cal-date.ev.hol{background:var(--gold-pale); color:var(--gold-deep);}
+  .cal-date.ev:active{transform:scale(0.94);}
+  .cal-date.today{box-shadow:0 0 0 2.5px var(--coral);}
+  .cal-dots{position:absolute; bottom:1px; left:50%; transform:translateX(-50%); display:flex; gap:2px;}
+  .cal-dots span{width:4px; height:4px; border-radius:50%; background:var(--sky);}
+  .cal-date.hol .cal-dots span{background:var(--gold-deep);}
+
+  .legend-row{display:flex; gap:14px; padding:14px 4px 4px; flex-wrap:wrap;}
+  .li{display:flex; align-items:center; gap:5px; font-size:11px; color:var(--ink-soft);}
+  .ld{width:9px; height:9px; border-radius:50%;}
+
+  .section{margin-top:24px;}
+  .section-title{font-size:16px; color:var(--sky-deep); margin:0 0 10px; padding:0 2px;}
+  .ag-card{
+    background:var(--white); border-radius:14px; padding:13px 14px; margin-bottom:8px;
+    display:flex; gap:11px; align-items:flex-start; border-left:4px solid var(--sky); box-shadow:0 3px 10px rgba(27,79,114,0.05);
+  }
+  .ag-card.hol{border-left-color:var(--gold);}
+  .ag-date-badge{
+    background:var(--sky-pale); color:var(--sky-deep); font-size:11px; font-weight:700; border-radius:10px;
+    padding:6px 8px; text-align:center; min-width:44px; line-height:1.2; flex-shrink:0;
+  }
+  .ag-card.hol .ag-date-badge{background:var(--gold-pale); color:var(--gold-deep);}
+  .ag-body{flex:1;}
+  .ag-label{font-size:13px; font-weight:600; line-height:1.4;}
+  .ag-tag{font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; color:var(--sky); margin-top:3px; display:inline-block;}
+  .ag-card.hol .ag-tag{color:var(--gold-deep);}
+  .empty-note{color:var(--ink-soft); font-size:13px; padding:20px; background:var(--white); border-radius:14px; text-align:center; border:1px dashed var(--line);}
+
+  .year-toggle{
+    width:100%; text-align:center; background:var(--white); border:1.5px dashed var(--sky-mid); color:var(--sky-deep);
+    font-weight:700; font-size:12.5px; padding:12px; border-radius:14px; cursor:pointer; margin-top:22px;
+  }
+  #yearAgenda{display:none; margin-top:14px;}
+  #yearAgenda.show{display:block;}
+  .ya-month{font-size:13px; font-weight:700; color:var(--sky-deep); margin:16px 0 8px; padding-bottom:5px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px;}
+
+  #modal{display:none; position:fixed; inset:0; background:rgba(15,25,32,0.55); z-index:200; align-items:center; justify-content:center; padding:20px;}
+  #modal.show{display:flex;}
+  .modal-card{background:var(--white); border-radius:22px; padding:22px 20px 28px; width:100%; max-width:480px; max-height:85vh; overflow-y:auto;}
+  .modal-close{float:right; background:var(--sky-pale); border:none; width:30px; height:30px; border-radius:50%; font-size:16px; color:var(--sky-deep); cursor:pointer;}
+  .modal-title{font-family:'Fraunces',serif; font-size:17px; font-weight:600; color:var(--sky-deep); margin-bottom:14px;}
+
+  </style>
+
+<div class="hero">
+  <svg class="hero-illust" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="112" cy="46" r="30" fill="var(--sun)"/>
+    <g stroke="var(--sun)" stroke-width="4" stroke-linecap="round">
+      <line x1="112" y1="0" x2="112" y2="8"/>
+      <line x1="150" y1="10" x2="145" y2="16"/>
+      <line x1="156" y1="46" x2="148" y2="46"/>
+      <line x1="150" y1="82" x2="145" y2="76"/>
+    </g>
+    <ellipse cx="60" cy="95" rx="46" ry="20" fill="rgba(255,255,255,0.22)"/>
+    <ellipse cx="30" cy="80" rx="26" ry="14" fill="rgba(255,255,255,0.16)"/>
+  </svg>
+  <div class="wrap">
+    <a class="back-btn" href="#/beranda">← Beranda</a>
+    <div class="hero-title-row">
+      <div class="hero-title">Kalender Akademik</div>
+      <div class="hero-sub">Tahun Ajaran 2026/2027 · SDIT Ar-Rahmah Sulawesi</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="monthnav-float">
+    <div class="monthnav">
+      <button class="mn-btn" id="btnPrev" aria-label="Bulan sebelumnya">‹</button>
+      <div class="mn-center">
+        <div class="mn-month" id="mnMonth">Juli 2026</div>
+        <span class="mn-sem" id="mnSem">Ganjil</span>
+      </div>
+      <button class="mn-btn" id="btnNext" aria-label="Bulan berikutnya">›</button>
+    </div>
+  </div>
+
+  <div class="chip-scroll" id="chipScroll"></div>
+
+  <div class="cal-card">
+    <div class="cal-dow" id="calDow"></div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="legend-row">
+      <span class="li"><span class="ld" style="background:var(--sky);"></span>Kegiatan sekolah</span>
+      <span class="li"><span class="ld" style="background:var(--gold-deep);"></span>Libur / hari besar</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title" id="agendaTitle">Agenda Bulan Ini</h2>
+    <div id="agendaList"></div>
+  </div>
+
+  <button class="year-toggle" id="yearToggle">📖 Lihat Agenda Satu Tahun Penuh</button>
+  <div id="yearAgenda"></div>
+</div>
+
+<div id="modal">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-title" id="modalTitle"></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script data-page-script>
+var MONTHS=[
+  {name:'Juli 2026',short:'Jul',sem:'ganjil',startDay:3,days:31,events:[
+    {dates:[13,14,15,16,17],label:'MPLS (English Camp)',type:'school'},
+    {dates:[18],label:'Tudang Sipulung (Stadium General)',type:'school'},
+    {dates:[23],label:'Hari Anak Nasional',type:'holiday'}
+  ]},
+  {name:'Agustus 2026',short:'Ags',sem:'ganjil',startDay:6,days:31,events:[
+    {dates:[12,13,14],label:'Semarak Kemerdekaan HUT RI',type:'school'},
+    {dates:[17],label:'Upacara dan Penutupan HUT RI',type:'holiday'},
+    {dates:[24],label:'Peringatan Hari Besar Islam (Maulid)',type:'school'},
+    {dates:[25],label:'Maulid Nabi Muhammad SAW',type:'holiday'},
+    {dates:[21,22],label:'Mabit Kelas I dan Kelas II',type:'school'},
+    {dates:[28],label:'Mabit Putri Kelas III dan IV',type:'school'},
+    {dates:[29],label:'Mabit Putra Kelas III dan IV',type:'school'}
+  ]},
+  {name:'September 2026',short:'Sep',sem:'ganjil',startDay:2,days:30,events:[
+    {dates:[4],label:'Mabit Putri Kelas V dan VI',type:'school'},
+    {dates:[5],label:'Mabit Putra Kelas V dan VI',type:'school'},
+    {dates:[21,22,23,24,25],label:'STS (Sumatif Tengah Semester)',type:'school'}
+  ]},
+  {name:'Oktober 2026',short:'Okt',sem:'ganjil',startDay:4,days:31,events:[
+    {dates:[1],label:'Hari Kesaktian Pancasila',type:'holiday'},
+    {dates:[2],label:'Hari Batik Nasional',type:'holiday'},
+    {dates:[3],label:'Penerimaan Rapor STS Ganjil (Parenting × Unjuk Bakat)',type:'school'},
+    {dates:[28],label:'Hari Sumpah Pemuda',type:'holiday'},
+    {dates:[8,9],label:'Leadership Camp Kelas IV',type:'school'},
+    {dates:[15,16,17],label:'Leadership Camp Kelas V dan VI',type:'school'}
+  ]},
+  {name:'November 2026',short:'Nov',sem:'ganjil',startDay:0,days:30,events:[
+    {dates:[10],label:'Hari Pahlawan',type:'holiday'},
+    {dates:[12],label:'Hari Ayah',type:'holiday'},
+    {dates:[25],label:'Hari Guru Nasional',type:'holiday'},
+    {dates:[14],label:'Outbound Kelas I',type:'school'},
+    {dates:[21],label:'Outbound Kelas II',type:'school'},
+    {dates:[28],label:'Outbound Kelas III',type:'school'},
+    {dates:[23,24,25,26,27],label:'Ujian WAFA Ganjil dan Praktek',type:'school'},
+    {dates:[30],label:'SAS Ganjil (mulai)',type:'school'}
+  ]},
+  {name:'Desember 2026',short:'Des',sem:'ganjil',startDay:2,days:31,events:[
+    {dates:[1,2,3,4],label:'SAS Ganjil',type:'school'},
+    {dates:[7,8,9,10,11],label:'Ujian Susulan, Remedial, Porseni',type:'school'},
+    {dates:[14,15,16,17,18,19],label:'Penerimaan Rapor (Home Visit)',type:'school'},
+    {dates:[22,23,24,25,26,27,28,29,30,31],label:'Libur Semester Ganjil',type:'holiday'}
+  ]},
+  {name:'Januari 2027',short:'Jan',sem:'genap',startDay:5,days:31,events:[
+    {dates:[1],label:'Tahun Baru Masehi',type:'holiday'},
+    {dates:[5],label:"Isra' Miraj Nabi Muhammad SAW",type:'holiday'},
+    {dates:[22,23,30],label:'Perkiraan Rapat Ortu Semester Genap',type:'school'},
+    {dates:[22,23],label:'Mabit Kelas I dan Kelas II',type:'school'},
+    {dates:[29],label:'Mabit Putra Kelas III dan IV',type:'school'},
+    {dates:[30],label:'Mabit Putri Kelas III dan IV',type:'school'}
+  ]},
+  {name:'Februari 2027',short:'Feb',sem:'genap',startDay:1,days:28,events:[
+    {dates:[5],label:'Mabit Putri Kelas V dan VI',type:'school'},
+    {dates:[6],label:'Mabit Putra Kelas V dan VI',type:'school'},
+    {dates:[8,9,10,11,12],label:'Libur Awal Ramadhan',type:'holiday'},
+    {dates:[24,25,26],label:'Sanlat (Pesantren Kilat)',type:'school'},
+    {dates:[26],label:'Bukber Kelas 1, 2 dan 3',type:'school'},
+    {dates:[27],label:'Bukber Kelas 4, 5 dan 6',type:'school'}
+  ]},
+  {name:'Maret 2027',short:'Mar',sem:'genap',startDay:1,days:31,events:[
+    {dates:[1,2,3,4,5,6,7,8,9],label:"I'tikaf",type:'school'},
+    {dates:[9,10,11],label:'Hari Raya Idul Fitri 1448 H',type:'holiday'},
+    {dates:[8,9,10,11,12,13,14,15,16],label:'Libur Idul Fitri 1448 H',type:'holiday'},
+    {dates:[17],label:'Halal bi Halal',type:'school'},
+    {dates:[29,30,31],label:'STS Genap (mulai)',type:'school'}
+  ]},
+  {name:'April 2027',short:'Apr',sem:'genap',startDay:4,days:30,events:[
+    {dates:[1,2],label:'STS Genap',type:'school'},
+    {dates:[10],label:'Penerimaan Rapor STS Genap × EXPO',type:'school'},
+    {dates:[17],label:'Pramunaqosya',type:'school'},
+    {dates:[21],label:'Hari Kartini',type:'holiday'},
+    {dates:[22],label:'Hari Bumi',type:'holiday'}
+  ]},
+  {name:'Mei 2027',short:'Mei',sem:'genap',startDay:5,days:31,events:[
+    {dates:[1],label:'Hari Buruh / Munaqosyah Wafa',type:'school'},
+    {dates:[20],label:'Hari Kebangkitan Nasional',type:'holiday'},
+    {dates:[10,11,12,13,14],label:'SAJ (Sumatif Akhir Jenjang)',type:'school'},
+    {dates:[15],label:'Pengukuhan Munaqosyah / Wisuda Tahfidz',type:'school'},
+    {dates:[17,18,19,20,21],label:'Hari Libur Idul Adha',type:'holiday'},
+    {dates:[31],label:'Ujian Praktek / Wafa',type:'school'}
+  ]},
+  {name:'Juni 2027',short:'Jun',sem:'genap',startDay:1,days:30,events:[
+    {dates:[2,3,4],label:'Ujian Praktek WAFA',type:'school'},
+    {dates:[7,8,9,10,11],label:'SAS Genap',type:'school'},
+    {dates:[9,10,11],label:'Ujian Praktek, Susulan, dan Remedial',type:'school'},
+    {dates:[14,15,16,17,18],label:'Remedial dan Pemeriksaan Kesehatan',type:'school'},
+    {dates:[19],label:'Penamatan (Ramah Tamah)',type:'school'},
+    {dates:[21,22,23,24,25],label:'Munaqosyah Salat',type:'school'},
+    {dates:[26],label:"Penerimaan Rapor × Tasmi' Face to Face",type:'school'}
+  ]}
+];
+
+var DOW = ['Ahd','Sen','Sel','Rab','Kam','Jum','Sab'];
+var curIdx = 0;
+
+(function initMonth(){
+  const now = new Date();
+  const monthNames = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const found = MONTHS.findIndex(m => {
+    const parts = m.name.split(' ');
+    return monthNames.indexOf(parts[0]) === now.getMonth() && parseInt(parts[1]) === now.getFullYear();
+  });
+  curIdx = found >= 0 ? found : 0;
+})();
+
+function evMap(m){
+  const mp = {};
+  m.events.forEach(ev => ev.dates.forEach(d => { if(!mp[d]) mp[d]=[]; mp[d].push(ev); }));
+  return mp;
+}
+
+function isToday(m, day){
+  const now = new Date();
+  const monthNames = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const parts = m.name.split(' ');
+  return monthNames.indexOf(parts[0]) === now.getMonth() && parseInt(parts[1]) === now.getFullYear() && day === now.getDate();
+}
+
+function renderChips(){
+  const el = document.getElementById('chipScroll');
+  el.innerHTML = MONTHS.map((m,i) => `<button class="m-chip ${i===curIdx?'active':''}" data-i="${i}">${m.short}</button>`).join('');
+  el.querySelectorAll('.m-chip').forEach(btn => btn.addEventListener('click', () => { curIdx = +btn.dataset.i; render(); }));
+  const activeChip = el.querySelector('.m-chip.active');
+  if (activeChip) activeChip.scrollIntoView({inline:'center', block:'nearest'});
+}
+
+function renderDow(){
+  document.getElementById('calDow').innerHTML = DOW.map((d,i) => `<span class="${i===0?'sun':i===6?'sat':''}">${d}</span>`).join('');
+}
+
+function renderCalendar(){
+  const m = MONTHS[curIdx];
+  const em = evMap(m);
+  document.getElementById('mnMonth').textContent = m.name;
+  const semEl = document.getElementById('mnSem');
+  semEl.textContent = m.sem === 'ganjil' ? 'Semester Ganjil' : 'Semester Genap';
+  semEl.className = 'mn-sem ' + m.sem;
+
+  let cells = '';
+  for (let i=0; i<m.startDay; i++) cells += '<div class="cal-cell"></div>';
+  for (let d=1; d<=m.days; d++){
+    const dow = (m.startDay + d - 1) % 7;
+    const evs = em[d];
+    let cls = 'cal-date';
+    if (dow===0) cls += ' sun-c';
+    if (dow===6) cls += ' sat-c';
+    let dots = '';
+    if (evs){
+      const hol = evs.some(e => e.type==='holiday');
+      cls += hol ? ' ev hol' : ' ev';
+      const n = Math.min(evs.length, 3);
+      dots = `<div class="cal-dots">${'<span></span>'.repeat(n)}</div>`;
+    }
+    if (isToday(m, d)) cls += ' today';
+    const attr = evs ? `data-day="${d}"` : '';
+    cells += `<div class="cal-cell"><button class="${cls}" ${attr}>${d}${dots}</button></div>`;
+  }
+  document.getElementById('calGrid').innerHTML = cells;
+  document.querySelectorAll('.cal-date.ev').forEach(btn => {
+    btn.addEventListener('click', () => bukaModalTanggal(m, +btn.dataset.day));
+  });
+}
+
+function renderAgendaBulan(){
+  const m = MONTHS[curIdx];
+  document.getElementById('agendaTitle').textContent = `Agenda ${m.name}`;
+  const el = document.getElementById('agendaList');
+  if (!m.events.length){ el.innerHTML = `<div class="empty-note">Belum ada kegiatan tercatat bulan ini.</div>`; return; }
+  el.innerHTML = m.events.map(ev => {
+    const ds = ev.dates.length>1 ? `${ev.dates[0]}–${ev.dates[ev.dates.length-1]}` : `${ev.dates[0]}`;
+    const hol = ev.type==='holiday';
+    return `
+      <div class="ag-card ${hol?'hol':''}">
+        <div class="ag-date-badge">${ds}<br>${m.short}</div>
+        <div class="ag-body">
+          <div class="ag-label">${ev.label}</div>
+          <span class="ag-tag">${hol?'Libur / Hari Besar':'Kegiatan Sekolah'}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function bukaModalTanggal(m, day){
+  const evs = m.events.filter(e => e.dates.includes(day));
+  document.getElementById('modalTitle').textContent = `${day} ${m.name}`;
+  document.getElementById('modalBody').innerHTML = evs.map(ev => {
+    const hol = ev.type==='holiday';
+    return `<div class="ag-card ${hol?'hol':''}" style="margin-bottom:8px;">
+      <div class="ag-date-badge">${day}<br>${m.short}</div>
+      <div class="ag-body">
+        <div class="ag-label">${ev.label}</div>
+        <span class="ag-tag">${hol?'Libur / Hari Besar':'Kegiatan Sekolah'}</span>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('modal').classList.add('show');
+}
+document.getElementById('modalClose').addEventListener('click', () => document.getElementById('modal').classList.remove('show'));
+document.getElementById('modal').addEventListener('click', (e) => { if (e.target.id==='modal') e.currentTarget.classList.remove('show'); });
+
+function render(){
+  renderChips();
+  renderDow();
+  renderCalendar();
+  renderAgendaBulan();
+  document.getElementById('btnPrev').disabled = curIdx === 0;
+  document.getElementById('btnNext').disabled = curIdx === MONTHS.length - 1;
+}
+
+document.getElementById('btnPrev').addEventListener('click', () => { if (curIdx>0){ curIdx--; render(); } });
+document.getElementById('btnNext').addEventListener('click', () => { if (curIdx<MONTHS.length-1){ curIdx++; render(); } });
+
+document.getElementById('yearToggle').addEventListener('click', function(){
+  const el = document.getElementById('yearAgenda');
+  const showing = el.classList.toggle('show');
+  this.textContent = showing ? '📖 Sembunyikan Agenda Satu Tahun' : '📖 Lihat Agenda Satu Tahun Penuh';
+  if (showing && !el.dataset.built){
+    el.dataset.built = '1';
+    el.innerHTML = MONTHS.map(m => {
+      const semTag = m.sem === 'ganjil'
+        ? `<span class="mn-sem ganjil" style="margin:0;">Ganjil</span>`
+        : `<span class="mn-sem genap" style="margin:0;">Genap</span>`;
+      const items = m.events.length
+        ? m.events.map(ev => {
+            const ds = ev.dates.length>1 ? `${ev.dates[0]}–${ev.dates[ev.dates.length-1]}` : `${ev.dates[0]}`;
+            const hol = ev.type==='holiday';
+            return `<div class="ag-card ${hol?'hol':''}">
+              <div class="ag-date-badge">${ds}<br>${m.short}</div>
+              <div class="ag-body"><div class="ag-label">${ev.label}</div><span class="ag-tag">${hol?'Libur / Hari Besar':'Kegiatan Sekolah'}</span></div>
+            </div>`;
+          }).join('')
+        : `<div class="empty-note">Tidak ada kegiatan tercatat.</div>`;
+      return `<div class="ya-month">${m.name} ${semTag}</div>${items}`;
+    }).join('');
+  }
+});
+
+render();
+</script>

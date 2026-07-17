@@ -1,0 +1,327 @@
+<style>
+  :root{
+    --sky:#2E86C1; --sky-deep:#1B4F72; --sky-pale:#EAF4FC;
+    --gold:#C9972F; --gold-pale:#FFF6E0;
+    --coral:#E2703A; --coral-pale:#FDECE3;
+    --indigo:#3B5BA5; --indigo-pale:#EAEDF9;
+    --white:#FFFFFF; --ink:#1E2A33; --ink-soft:#6B7A84; --line:#E7EEF3;
+    --shadow:0 10px 26px rgba(27,79,114,0.10);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Plus Jakarta Sans',sans-serif; color:var(--ink);
+    background:var(--sky-pale); padding-bottom:88px; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,.display{font-family:'Fraunces',serif;}
+  img{max-width:100%;display:block;}
+  a{text-decoration:none;color:inherit;}
+
+  /* ---------- HEADER ---------- */
+  .hero{
+    background:linear-gradient(160deg, var(--sky-deep), var(--sky) 120%);
+    padding:28px 20px 44px;
+    border-radius:0 0 28px 28px;
+    color:var(--white);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:''; position:absolute; width:160px; height:160px; background:var(--gold);
+    opacity:0.16; border-radius:50%; top:-60px; right:-40px;
+  }
+  .hero-illust{position:absolute; top:-8px; right:-10px; width:130px; z-index:1; opacity:0.95;}
+  .hero-star{position:absolute; z-index:1; opacity:0.85;}
+  .hero-eyebrow{font-size:12px; letter-spacing:0.14em; text-transform:uppercase; opacity:0.8; margin-bottom:6px; position:relative; z-index:2;}
+  .hero-title{font-size:24px; font-weight:600; margin:0 0 4px; position:relative; z-index:2; max-width:78%;}
+  .hero-sub{font-size:13px; opacity:0.85; position:relative; z-index:2; max-width:82%;}
+
+  .wrap{max-width:720px; margin:0 auto; padding:0 16px;}
+
+  /* ---------- WALI KELAS CAROUSEL ---------- */
+  .section{margin-top:26px;}
+  .section-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:0 2px;}
+  .section-title{font-size:17px; color:var(--sky-deep); margin:0;}
+  .section-link{font-size:12px; font-weight:700; color:var(--sky);}
+
+  .wali-scroll{
+    display:flex; gap:12px; overflow-x:auto; padding:2px 2px 10px;
+    scroll-snap-type:x proximity;
+  }
+  .wali-scroll::-webkit-scrollbar{height:5px;}
+  .wali-scroll::-webkit-scrollbar-thumb{background:#C7DCEC; border-radius:10px;}
+  .wali-card{
+    scroll-snap-align:start;
+    min-width:210px; max-width:210px;
+    background:var(--white); border-radius:18px; padding:16px;
+    box-shadow:var(--shadow); flex-shrink:0; cursor:pointer;
+    border:1px solid var(--line);
+  }
+  .wali-top{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .wali-photo{
+    width:44px; height:44px; border-radius:50%; object-fit:cover;
+    border:2px solid var(--gold); background:var(--sky-pale); flex-shrink:0;
+  }
+  .wali-name{font-size:13.5px; font-weight:700; color:var(--ink); line-height:1.25;}
+  .wali-rombel{
+    display:inline-block; margin-top:2px; font-size:10.5px; font-weight:700;
+    color:var(--sky); background:var(--sky-pale); padding:1px 8px; border-radius:999px;
+  }
+  .wali-msg{
+    font-size:12.5px; color:var(--ink-soft); line-height:1.55;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+  }
+
+  /* ---------- INFO KELAS ---------- */
+  .info-item{
+    background:var(--white); border:1px solid var(--line); border-radius:16px;
+    padding:15px 16px; margin-bottom:10px; display:flex; gap:12px;
+  }
+  .info-item.tinggi{border-color:var(--gold); background:var(--gold-pale);}
+  .info-dot{width:8px; height:8px; border-radius:50%; background:var(--sky); margin-top:6px; flex-shrink:0;}
+  .info-item.tinggi .info-dot{background:var(--gold);}
+  .info-top{display:flex; justify-content:space-between; gap:8px; align-items:baseline; margin-bottom:4px; flex-wrap:wrap;}
+  .info-judul{font-size:13.5px; font-weight:700;}
+  .info-meta{display:flex; gap:6px; align-items:center; flex-shrink:0;}
+  .info-rombel{font-size:10px; font-weight:700; color:var(--sky-deep); background:var(--sky-pale); padding:1px 7px; border-radius:999px;}
+  .info-tanggal{font-size:11px; color:var(--ink-soft); white-space:nowrap;}
+  .info-isi{font-size:13px; color:var(--ink-soft); line-height:1.6; margin:0;}
+  .empty-note{
+    color:var(--ink-soft); font-size:13px; padding:18px; background:var(--white);
+    border-radius:14px; text-align:center; border:1px dashed var(--line);
+  }
+
+  /* ---------- MENU CARDS (gaya app playful) ---------- */
+  .menu-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .menu-card{
+    border-radius:20px; padding:18px 16px 16px; position:relative; overflow:hidden;
+    min-height:132px; display:flex; flex-direction:column; justify-content:flex-end;
+    box-shadow:var(--shadow);
+    background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px);
+    background-size:14px 14px;
+  }
+  .menu-card::before{
+    content:''; position:absolute; width:78px; height:78px; border-radius:50%;
+    background:rgba(255,255,255,0.14); top:-26px; left:-22px;
+  }
+  .menu-card .m-icon{font-size:28px; position:absolute; top:14px; right:14px; opacity:0.95; filter:drop-shadow(0 2px 3px rgba(0,0,0,0.12));}
+  .menu-card .m-title{font-family:'Fraunces',serif; font-size:16px; font-weight:600; color:var(--white); margin-bottom:2px; position:relative;}
+  .menu-card .m-sub{font-size:11px; color:rgba(255,255,255,0.88); position:relative;}
+  .menu-card .m-badge{
+    position:absolute; bottom:14px; right:14px;
+    background:rgba(255,255,255,0.25); color:var(--white); font-size:11px; font-weight:700;
+    padding:2px 9px; border-radius:999px; border:1px solid rgba(255,255,255,0.4);
+  }
+  .mc-kalender{background-color:var(--sky); background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px), linear-gradient(150deg, #3E9AD6, var(--sky-deep)); background-size:14px 14px, auto;}
+  .mc-budaya{background-color:var(--gold); background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px), linear-gradient(150deg, #E0B24E, #A6791F); background-size:14px 14px, auto;}
+  .mc-galeri{background-color:var(--coral); background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px), linear-gradient(150deg, #EC8256, #B84E24); background-size:14px 14px, auto;}
+  .mc-aturan{background-color:var(--indigo); background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px), linear-gradient(150deg, #4E70C2, #253D75); background-size:14px 14px, auto;}
+  .mc-panduan{background-color:var(--indigo); background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px), linear-gradient(150deg, var(--indigo), var(--sky-deep)); background-size:14px 14px, auto;}
+  .mc-pengaduan{background-color:#B23A3A; background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px), linear-gradient(150deg, #D2585A, #7A2626); background-size:14px 14px, auto;}
+  .mc-sava{background-color:var(--sky-deep); background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px), linear-gradient(150deg, #2E86C1, #12324A); background-size:14px 14px, auto;}
+
+  .loading, .error-box{text-align:center; padding:40px 20px; color:var(--ink-soft);}
+  .error-box{color:#B23A3A;}
+  .spinner{width:26px; height:26px; border:3px solid var(--sky-pale); border-top-color:var(--sky); border-radius:50%; animation:spin .7s linear infinite; margin:0 auto 12px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* ---------- MODAL PESAN WALI KELAS ---------- */
+  #modal{
+    display:none; position:fixed; inset:0; background:rgba(15,25,32,0.55);
+    z-index:200; align-items:center; justify-content:center; padding:20px;
+  }
+  #modal.show{display:flex;}
+  .modal-card{
+    background:var(--white); border-radius:22px; padding:24px 22px 30px;
+    width:100%; max-width:480px; max-height:85vh; overflow-y:auto;
+  }
+  .modal-close{float:right; background:var(--sky-pale); border:none; width:30px; height:30px; border-radius:50%; font-size:16px; color:var(--sky-deep); cursor:pointer;}
+  .modal-top{display:flex; gap:12px; align-items:center; margin-bottom:14px;}
+  .modal-photo{width:54px; height:54px; border-radius:50%; object-fit:cover; border:2.5px solid var(--gold); background:var(--sky-pale);}
+  .modal-name{font-family:'Fraunces',serif; font-size:17px; font-weight:600; color:var(--sky-deep);}
+  .modal-msg{font-size:13.5px; line-height:1.7; color:var(--ink); white-space:pre-line;}
+  .modal-date{font-size:11px; color:var(--ink-soft); margin-top:14px;}
+
+  /* ---------- BOTTOM TAB BAR ---------- */
+  </style>
+
+<div class="hero">
+  <svg class="hero-illust" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="98" cy="40" r="26" fill="#F6BE3E"/>
+    <g stroke="#F6BE3E" stroke-width="4" stroke-linecap="round">
+      <line x1="98" y1="0" x2="98" y2="7"/>
+      <line x1="130" y1="10" x2="125" y2="15"/>
+      <line x1="136" y1="40" x2="129" y2="40"/>
+    </g>
+    <ellipse cx="55" cy="85" rx="42" ry="18" fill="rgba(255,255,255,0.20)"/>
+    <ellipse cx="20" cy="70" rx="22" ry="12" fill="rgba(255,255,255,0.14)"/>
+  </svg>
+  <svg class="hero-star" style="top:18px; left:60%; width:14px;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 0l2.5 8.5L23 11l-8.5 2.5L12 22l-2.5-8.5L1 11l8.5-2.5z" fill="#FFF3D9"/></svg>
+  <svg class="hero-star" style="top:60px; left:72%; width:9px;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 0l2.5 8.5L23 11l-8.5 2.5L12 22l-2.5-8.5L1 11l8.5-2.5z" fill="#FFF3D9"/></svg>
+  <div class="wrap">
+    <div class="hero-eyebrow">Yayasan Ar-Rahmah Sulawesi</div>
+    <h1 class="hero-title">Assalamu'alaikum, Ayah &amp; Bunda 👋</h1>
+    <div class="hero-sub">Rumah digital Kelas VI — kabar kelas, kalender, dan kegiatan anak-anak.</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="section">
+    <div class="section-head"><h2 class="section-title">Pesan Wali Kelas</h2></div>
+    <div class="wali-scroll" id="waliScroll">
+      <div class="loading"><div class="spinner"></div>Memuat…</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2 class="section-title">Info Kelas</h2></div>
+    <div id="infoList"><div class="loading"><div class="spinner"></div>Memuat…</div></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2 class="section-title">Jelajah Kelas I</h2></div>
+    <div class="menu-grid">
+      <a class="menu-card mc-kalender" href="#/kalender">
+        <span class="m-icon">📅</span>
+        <span class="m-title">Kalender<br>Akademik</span>
+        <span class="m-sub">Tahun Ajaran 2026/2027</span>
+      </a>
+      <a class="menu-card mc-budaya" href="#/budaya">
+        <span class="m-icon">📚</span>
+        <span class="m-title">Budaya &amp;<br>Pembiasaan</span>
+        <span class="m-sub">Buku Budaya Siswa</span>
+      </a>
+      <a class="menu-card mc-sava" href="https://sava.arrahmahmks.sch.id/walisd" target="_blank" rel="noopener noreferrer" style="grid-column:1 / -1;">
+        <span class="m-icon">🖥️</span>
+        <span class="m-title">SAVA — Sistem Aplikasi Virtual Ar-Rahmah</span>
+        <span class="m-sub">Portal akademik &amp; nilai untuk wali murid SD</span>
+      </a>
+      <a class="menu-card mc-galeri" href="#/galeri">
+        <span class="m-icon">🖼️</span>
+        <span class="m-title">Galeri<br>Kegiatan</span>
+        <span class="m-sub">Foto &amp; album</span>
+        <span class="m-badge" id="galeriBadge" style="display:none;"></span>
+      </a>
+      <a class="menu-card mc-aturan" href="#/aturan">
+        <span class="m-icon">📋</span>
+        <span class="m-title">Info<br>Kelas</span>
+        <span class="m-sub">Yang perlu diketahui</span>
+      </a>
+      <a class="menu-card mc-panduan" href="#/panduan" style="grid-column:1 / -1;">
+        <span class="m-icon">📖</span>
+        <span class="m-title">Buku Saku Mitra Orang Tua</span>
+        <span class="m-sub">Kode etik, adab komunikasi &amp; alur pengaduan</span>
+      </a>
+      <a class="menu-card mc-pengaduan" href="https://pengaduan.arrahmahsulawesi.org/" target="_blank" rel="noopener noreferrer" style="grid-column:1 / -1;">
+        <span class="m-icon">📢</span>
+        <span class="m-title">Portal Pengaduan</span>
+        <span class="m-sub">Sampaikan masukan, saran, atau keluhan Ayah &amp; Bunda</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<div id="modal">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-top">
+      <img class="modal-photo" id="modalPhoto" src="" alt="">
+      <div>
+        <div class="modal-name" id="modalName"></div>
+        <span class="wali-rombel" id="modalRombel"></span>
+      </div>
+    </div>
+    <p class="modal-msg" id="modalMsg"></p>
+    <div class="modal-date" id="modalDate"></div>
+  </div>
+</div>
+
+<script data-page-script>
+var API_URL = 'https://script.google.com/macros/s/AKfycbzxpd7mmunr0ZJTB4lU_wF3eykejJTGfeAK4Q0mom2S7B7cLGPnR3q1GgLEK6SfxWLY/exec'; // ganti setelah deploy Apps Script
+
+var WALI_DATA = [];
+
+async function muatBeranda(){
+  try{
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    if (data.status !== 'ok') throw new Error(data.message || 'Gagal memuat data.');
+    WALI_DATA = data.waliKelas || [];
+    renderWali(WALI_DATA);
+    renderInfo(data.infoKelas || []);
+    renderBadge(data.galeriRingkas || []);
+  }catch(err){
+    document.getElementById('waliScroll').innerHTML = `<div class="error-box">Gagal memuat data: ${err.message}</div>`;
+    document.getElementById('infoList').innerHTML = '';
+  }
+}
+
+function renderWali(list){
+  const el = document.getElementById('waliScroll');
+  if (!list.length){ el.innerHTML = `<div class="empty-note">Pesan wali kelas belum tersedia.</div>`; return; }
+  el.innerHTML = list.map((w, i) => `
+    <div class="wali-card" onclick="bukaModal(${i})">
+      <div class="wali-top">
+        ${w.Foto ? `<img class="wali-photo" src="${w.Foto}" alt="">` : `<div class="wali-photo"></div>`}
+        <div>
+          <div class="wali-name">${escapeHtml(w.NamaWaliKelas || '')}</div>
+          <span class="wali-rombel">${escapeHtml(w.Rombel || '')}</span>
+        </div>
+      </div>
+      <div class="wali-msg">${escapeHtml(w.PesanSingkat || '')}</div>
+    </div>
+  `).join('');
+}
+
+function bukaModal(i){
+  const w = WALI_DATA[i];
+  document.getElementById('modalPhoto').src = w.Foto || '';
+  document.getElementById('modalName').textContent = w.NamaWaliKelas || '';
+  document.getElementById('modalRombel').textContent = w.Rombel || '';
+  document.getElementById('modalMsg').textContent = w.PesanSingkat || '';
+  document.getElementById('modalDate').textContent = w.TanggalUpdate ? `Diperbarui ${formatTanggal(w.TanggalUpdate)}` : '';
+  document.getElementById('modal').classList.add('show');
+}
+document.getElementById('modalClose').addEventListener('click', () => document.getElementById('modal').classList.remove('show'));
+document.getElementById('modal').addEventListener('click', (e) => { if (e.target.id === 'modal') e.currentTarget.classList.remove('show'); });
+
+function renderInfo(list){
+  const el = document.getElementById('infoList');
+  if (!list.length){ el.innerHTML = `<div class="empty-note">Belum ada info kelas terbaru.</div>`; return; }
+  el.innerHTML = list.map(p => `
+    <div class="info-item ${String(p.Prioritas).toLowerCase() === 'tinggi' ? 'tinggi' : ''}">
+      <div class="info-dot"></div>
+      <div style="flex:1;">
+        <div class="info-top">
+          <span class="info-judul">${escapeHtml(p.Judul || '')}</span>
+          <span class="info-meta">
+            ${p.Rombel ? `<span class="info-rombel">${escapeHtml(p.Rombel)}</span>` : ''}
+            <span class="info-tanggal">${formatTanggal(p.Tanggal)}</span>
+          </span>
+        </div>
+        <p class="info-isi">${escapeHtml(p.Isi || '')}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderBadge(galeri){
+  if (!galeri.length) return;
+  const badge = document.getElementById('galeriBadge');
+  badge.textContent = `${galeri.length} baru`;
+  badge.style.display = 'inline-block';
+}
+
+function formatTanggal(str){
+  if (!str) return '';
+  const d = new Date(str);
+  if (isNaN(d)) return str;
+  return d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+}
+function escapeHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+muatBeranda();
+</script>

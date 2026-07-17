@@ -1,0 +1,180 @@
+<style>
+  :root{
+    --sky:#2E86C1; --sky-deep:#1B4F72; --sky-pale:#EAF4FC;
+    --gold:#C9972F; --gold-pale:#FFF6E0;
+    --coral:#E2703A; --coral-pale:#FDECE3;
+    --white:#FFFFFF; --ink:#1E2A33; --ink-soft:#6B7A84; --line:#E7EEF3;
+    --shadow:0 10px 26px rgba(27,79,114,0.10);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:'Plus Jakarta Sans',sans-serif; color:var(--ink); background:var(--sky-pale); padding-bottom:88px;}
+  h1,h2{font-family:'Fraunces',serif;}
+  a{text-decoration:none; color:inherit;}
+  img{max-width:100%; display:block;}
+
+  .hero{
+    background:linear-gradient(150deg, #F2865C, #B84E24);
+    background-image:radial-gradient(rgba(255,255,255,0.14) 1.6px, transparent 1.6px), linear-gradient(150deg, #F2865C, #B84E24);
+    background-size:14px 14px, auto;
+    padding:22px 20px 30px; border-radius:0 0 26px 26px; color:var(--white); position:relative; overflow:hidden;
+  }
+  .hero-illust{position:absolute; top:-18px; right:-14px; width:100px; opacity:0.9; z-index:1;}
+  .back-btn{
+    display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:600;
+    color:rgba(255,255,255,0.9); margin-bottom:10px; position:relative; z-index:2;
+  }
+  .hero-title{font-size:21px; font-weight:600; margin:0 0 4px; position:relative; z-index:2; max-width:75%;}
+  .hero-sub{font-size:12.5px; opacity:0.85; position:relative; z-index:2;}
+
+  .wrap{max-width:720px; margin:0 auto; padding:20px 16px 0;}
+
+  .filter-row{display:flex; gap:8px; overflow-x:auto; margin-bottom:16px; padding-bottom:2px;}
+  .filter-chip{
+    flex-shrink:0; font-size:12px; font-weight:700; padding:7px 14px; border-radius:999px;
+    background:var(--white); border:1.5px solid var(--line); color:var(--ink-soft); cursor:pointer;
+  }
+  .filter-chip.active{background:var(--coral); border-color:var(--coral); color:var(--white);}
+
+  .galeri-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .g-card{
+    background:var(--white); border-radius:16px; overflow:hidden; box-shadow:var(--shadow);
+    border:1px solid var(--line); cursor:pointer; position:relative;
+  }
+  .g-thumb{width:100%; aspect-ratio:1; object-fit:cover; background:var(--sky-pale);}
+  .g-body{padding:10px 12px 12px;}
+  .g-title{font-size:12.5px; font-weight:700; line-height:1.3; margin-bottom:3px;}
+  .g-meta{display:flex; justify-content:space-between; align-items:center; gap:6px;}
+  .g-date{font-size:10.5px; color:var(--ink-soft);}
+  .g-rombel{font-size:9.5px; font-weight:700; color:var(--sky-deep); background:var(--sky-pale); padding:1px 7px; border-radius:999px;}
+  .g-album-badge{
+    position:absolute; top:8px; left:8px; background:rgba(20,20,20,0.65); color:var(--white);
+    font-size:10px; font-weight:700; padding:3px 9px; border-radius:999px; display:flex; align-items:center; gap:4px;
+  }
+
+  .empty-note, .error-box{
+    text-align:center; padding:40px 20px; color:var(--ink-soft); background:var(--white);
+    border-radius:14px; border:1px dashed var(--line); grid-column:1/-1;
+  }
+  .error-box{color:#B23A3A; border-style:solid; border-color:#F3C9C9;}
+  .loading{grid-column:1/-1; text-align:center; padding:40px 20px; color:var(--ink-soft);}
+  .spinner{width:26px; height:26px; border:3px solid var(--sky-pale); border-top-color:var(--sky); border-radius:50%; animation:spin .7s linear infinite; margin:0 auto 12px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  #lightbox{display:none; position:fixed; inset:0; background:rgba(15,25,32,0.9); z-index:200; align-items:center; justify-content:center; padding:20px;}
+  #lightbox.show{display:flex;}
+  #lightbox img{max-width:100%; max-height:78vh; border-radius:12px;}
+  #lightbox .lb-cap{color:var(--white); text-align:center; margin-top:12px; font-size:13px;}
+  #lightbox .lb-close{position:absolute; top:20px; right:22px; color:var(--white); font-size:28px; background:none; border:none;}
+
+  </style>
+
+<div class="hero">
+  <svg class="hero-illust" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="18" y="42" width="70" height="52" rx="10" fill="rgba(255,255,255,0.22)"/>
+    <rect x="38" y="30" width="24" height="14" rx="4" fill="rgba(255,255,255,0.22)"/>
+    <circle cx="53" cy="70" r="16" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="4"/>
+    <circle cx="80" cy="50" r="5" fill="#FFF3D9"/>
+  </svg>
+  <div class="wrap" style="padding-top:0;">
+    <a class="back-btn" href="#/beranda">← Beranda</a>
+    <div class="hero-title">Galeri Kegiatan</div>
+    <div class="hero-sub">Foto &amp; album kegiatan Kelas I</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="filter-row" id="filterRow"></div>
+  <div class="galeri-grid" id="galeriGrid">
+    <div class="loading"><div class="spinner"></div>Memuat galeri…</div>
+  </div>
+</div>
+
+<div id="lightbox">
+  <button class="lb-close" id="lbClose">&times;</button>
+  <div>
+    <img id="lbImg" src="" alt="">
+    <div class="lb-cap" id="lbCap"></div>
+  </div>
+</div>
+
+<script data-page-script>
+var API_URL = 'https://script.google.com/macros/s/AKfycbzxpd7mmunr0ZJTB4lU_wF3eykejJTGfeAK4Q0mom2S7B7cLGPnR3q1GgLEK6SfxWLY/exec'; // ganti setelah deploy Apps Script
+
+var GALERI_DATA = [];
+var currentFilter = 'Semua';
+
+async function muatGaleri(){
+  try{
+    const res = await fetch(`${API_URL}?action=galeri`);
+    const data = await res.json();
+    if (data.status !== 'ok') throw new Error(data.message || 'Gagal memuat data.');
+    GALERI_DATA = data.galeri || [];
+    renderFilter();
+    renderGaleri();
+  }catch(err){
+    document.getElementById('galeriGrid').innerHTML = `<div class="error-box">Gagal memuat galeri: ${err.message}</div>`;
+  }
+}
+
+function renderFilter(){
+  const rombelSet = new Set(GALERI_DATA.map(g => g.Rombel).filter(Boolean));
+  const rombelList = ['Semua', ...Array.from(rombelSet).sort()];
+  const el = document.getElementById('filterRow');
+  el.innerHTML = rombelList.map(r => `<button class="filter-chip ${r === currentFilter ? 'active' : ''}" data-r="${escapeHtml(r)}">${escapeHtml(r)}</button>`).join('');
+  el.querySelectorAll('.filter-chip').forEach(btn => {
+    btn.addEventListener('click', () => { currentFilter = btn.dataset.r; renderFilter(); renderGaleri(); });
+  });
+}
+
+function renderGaleri(){
+  const list = currentFilter === 'Semua' ? GALERI_DATA : GALERI_DATA.filter(g => g.Rombel === currentFilter);
+  const el = document.getElementById('galeriGrid');
+  if (!list.length){ el.innerHTML = `<div class="empty-note">Belum ada foto atau album untuk ditampilkan.</div>`; return; }
+
+  el.innerHTML = list.map((g, i) => {
+    const isAlbum = String(g.Jenis).toLowerCase() === 'album';
+    const thumb = isAlbum ? g.Sampul : g.Foto;
+    return `
+      <div class="g-card" data-idx="${i}" data-type="${isAlbum ? 'album' : 'foto'}">
+        ${isAlbum ? `<span class="g-album-badge">📷 Album</span>` : ''}
+        <img class="g-thumb" src="${thumb || ''}" alt="${escapeHtml(g.Judul || '')}" loading="lazy">
+        <div class="g-body">
+          <div class="g-title">${escapeHtml(g.Judul || '')}</div>
+          <div class="g-meta">
+            <span class="g-date">${formatTanggal(g.Tanggal)}</span>
+            ${g.Rombel ? `<span class="g-rombel">${escapeHtml(g.Rombel)}</span>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  el.querySelectorAll('.g-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const item = list[+card.dataset.idx];
+      if (card.dataset.type === 'album') {
+        window.open(item.LinkAlbum, '_blank', 'noopener');
+      } else {
+        document.getElementById('lbImg').src = item.Foto;
+        document.getElementById('lbCap').textContent = `${item.Judul || ''}${item.Tanggal ? ' — ' + formatTanggal(item.Tanggal) : ''}`;
+        document.getElementById('lightbox').classList.add('show');
+      }
+    });
+  });
+}
+
+document.getElementById('lbClose').addEventListener('click', () => document.getElementById('lightbox').classList.remove('show'));
+document.getElementById('lightbox').addEventListener('click', (e) => { if (e.target.id === 'lightbox') e.currentTarget.classList.remove('show'); });
+
+function formatTanggal(str){
+  if (!str) return '';
+  const d = new Date(str);
+  if (isNaN(d)) return str;
+  return d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+}
+function escapeHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+muatGaleri();
+</script>

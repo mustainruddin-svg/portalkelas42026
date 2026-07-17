@@ -1,0 +1,341 @@
+<style>
+  :root{
+    --sky:#2E86C1; --sky-deep:#1B4F72; --sky-pale:#EAF4FC;
+    --gold:#C9972F; --gold-pale:#FFF6E0;
+    --coral:#E2703A; --coral-pale:#FDECE3;
+    --indigo:#3B5BA5; --indigo-pale:#EAEDF9;
+    --white:#FFFFFF; --ink:#1E2A33; --ink-soft:#6B7A84; --line:#E7EEF3;
+    --shadow:0 10px 26px rgba(27,79,114,0.10);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Plus Jakarta Sans',sans-serif; color:var(--ink);
+    background:var(--sky-pale); padding-bottom:88px; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,.display{font-family:'Fraunces',serif;}
+  img{max-width:100%;display:block;}
+  a{text-decoration:none;color:inherit;}
+
+  /* ---------- HEADER (identik dengan Beranda) ---------- */
+  .hero{
+    background:linear-gradient(160deg, var(--sky-deep), var(--sky) 120%);
+    padding:28px 20px 44px;
+    border-radius:0 0 28px 28px;
+    color:var(--white);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:''; position:absolute; width:160px; height:160px; background:var(--gold);
+    opacity:0.16; border-radius:50%; top:-60px; right:-40px;
+  }
+  .hero-illust{position:absolute; top:-8px; right:-10px; width:130px; z-index:1; opacity:0.95;}
+  .hero-star{position:absolute; z-index:1; opacity:0.85;}
+  .hero-eyebrow{font-size:12px; letter-spacing:0.14em; text-transform:uppercase; opacity:0.8; margin-bottom:6px; position:relative; z-index:2;}
+  .hero-title{font-size:24px; font-weight:600; margin:0 0 4px; position:relative; z-index:2; max-width:82%;}
+  .hero-sub{font-size:13px; opacity:0.85; position:relative; z-index:2; max-width:88%;}
+
+  .wrap{max-width:720px; margin:0 auto; padding:0 16px;}
+
+  .section{margin-top:26px;}
+  .section-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:0 2px;}
+  .section-title{font-size:17px; color:var(--sky-deep); margin:0;}
+
+  /* ---------- INFO-ITEM (dipakai ulang utk pembuka) ---------- */
+  .info-item{
+    background:var(--white); border:1px solid var(--line); border-radius:16px;
+    padding:15px 16px; margin-bottom:10px; display:flex; gap:12px;
+  }
+  .info-item.tinggi{border-color:var(--gold); background:var(--gold-pale);}
+  .info-dot{width:8px; height:8px; border-radius:50%; background:var(--sky); margin-top:6px; flex-shrink:0;}
+  .info-judul{font-size:13.5px; font-weight:700;}
+  .info-isi{font-size:13px; color:var(--ink-soft); line-height:1.6; margin:0;}
+
+  /* ---------- MENU CARDS (identik dengan Beranda) ---------- */
+  .menu-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .menu-card{
+    border-radius:20px; padding:18px 16px 16px; position:relative; overflow:hidden;
+    min-height:132px; display:flex; flex-direction:column; justify-content:flex-end;
+    box-shadow:var(--shadow); cursor:pointer; border:none; text-align:left; width:100%;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px);
+    background-size:14px 14px;
+  }
+  .menu-card::before{
+    content:''; position:absolute; width:78px; height:78px; border-radius:50%;
+    background:rgba(255,255,255,0.14); top:-26px; left:-22px;
+  }
+  .menu-card .m-icon{font-size:28px; position:absolute; top:14px; right:14px; opacity:0.95; filter:drop-shadow(0 2px 3px rgba(0,0,0,0.12));}
+  .menu-card .m-title{font-family:'Fraunces',serif; font-size:16px; font-weight:600; color:var(--white); margin-bottom:2px; position:relative;}
+  .menu-card .m-sub{font-size:11px; color:rgba(255,255,255,0.88); position:relative;}
+  .menu-card .m-badge{
+    position:absolute; bottom:14px; right:14px;
+    background:rgba(255,255,255,0.25); color:var(--white); font-size:11px; font-weight:700;
+    padding:2px 9px; border-radius:999px; border:1px solid rgba(255,255,255,0.4);
+  }
+  .mc-etika{background-color:var(--indigo); background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px), linear-gradient(150deg, #4E70C2, #253D75); background-size:14px 14px, auto;}
+  .mc-komunikasi{background-color:var(--sky); background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px), linear-gradient(150deg, #3E9AD6, var(--sky-deep)); background-size:14px 14px, auto;}
+  .mc-pengaduan{background-color:var(--coral); background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px), linear-gradient(150deg, #EC8256, #B84E24); background-size:14px 14px, auto;}
+  .mc-alur{background-color:var(--gold); background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px), linear-gradient(150deg, #E0B24E, #A6791F); background-size:14px 14px, auto;}
+  .mc-kepercayaan{
+    background-color:var(--sky-deep); grid-column:1 / -1;
+    background-image:radial-gradient(rgba(255,255,255,0.16) 1.6px, transparent 1.6px), linear-gradient(150deg, var(--indigo), var(--sky-deep));
+    background-size:14px 14px, auto; min-height:104px;
+  }
+
+  .closing-card{
+    background:var(--white); border:1.5px dashed var(--sky); border-radius:16px;
+    padding:15px 16px; margin-top:2px; display:flex; gap:12px; align-items:flex-start;
+  }
+  .closing-card .emoji{font-size:22px; flex-shrink:0;}
+  .closing-card p{margin:0; font-size:12.5px; line-height:1.65; color:var(--ink-soft);}
+  .closing-card strong{color:var(--sky-deep);}
+
+  /* ---------- MODAL (dipakai ulang, disesuaikan) ---------- */
+  #modal{
+    display:none; position:fixed; inset:0; background:rgba(15,25,32,0.55);
+    z-index:200; align-items:center; justify-content:center; padding:20px;
+  }
+  #modal.show{display:flex;}
+  .modal-card{
+    background:var(--white); border-radius:22px; padding:24px 22px 30px;
+    width:100%; max-width:480px; max-height:85vh; overflow-y:auto;
+  }
+  .modal-close{float:right; background:var(--sky-pale); border:none; width:30px; height:30px; border-radius:50%; font-size:16px; color:var(--sky-deep); cursor:pointer;}
+  .modal-top{display:flex; gap:12px; align-items:center; margin-bottom:14px;}
+  .modal-icon{
+    width:52px; height:52px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:24px;
+    background:var(--sky-pale); border:2.5px solid var(--gold);
+  }
+  .modal-name{font-family:'Fraunces',serif; font-size:17px; font-weight:600; color:var(--sky-deep);}
+  .modal-tag{
+    display:inline-block; margin-top:2px; font-size:10.5px; font-weight:700;
+    color:var(--sky); background:var(--sky-pale); padding:1px 8px; border-radius:999px;
+  }
+  .detail-intro{
+    background:var(--sky-pale); border-radius:14px; padding:12px 14px;
+    font-size:12.5px; line-height:1.65; color:var(--sky-deep); margin-bottom:14px;
+  }
+
+  .point-row{display:flex; gap:10px; margin-bottom:10px;}
+  .point-icon{
+    width:34px; height:34px; border-radius:10px; flex-shrink:0; font-size:16px;
+    background:var(--sky-pale); display:flex; align-items:center; justify-content:center;
+  }
+  .point-body h4{font-size:13px; font-weight:700; margin:0 0 2px; color:var(--ink);}
+  .point-body p{font-size:12px; line-height:1.55; margin:0; color:var(--ink-soft);}
+
+  .step-row{display:flex; gap:10px; margin-bottom:10px;}
+  .step-num{
+    width:26px; height:26px; border-radius:50%; background:var(--gold); color:var(--white);
+    font-size:11.5px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .step-body h4{font-size:13px; font-weight:700; margin:0 0 2px; color:var(--ink);}
+  .step-body p{font-size:12px; line-height:1.55; margin:0; color:var(--ink-soft);}
+
+  .stage-row{display:flex; gap:10px; margin-bottom:10px;}
+  .stage-dot{
+    width:26px; height:26px; border-radius:50%; color:var(--white);
+    font-size:11.5px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .stage-body .stage-tag{font-size:10px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; color:var(--gold);}
+  .stage-body h4{font-size:13px; font-weight:700; margin:2px 0 2px; color:var(--ink);}
+  .stage-body p{font-size:12px; line-height:1.55; margin:0; color:var(--ink-soft);}
+  .stage-note{
+    background:var(--gold-pale); border:1px solid var(--gold); border-radius:12px;
+    padding:10px 12px; font-size:11.5px; line-height:1.55; color:var(--ink); margin-top:4px; display:flex; gap:6px;
+  }
+
+  .loading{text-align:center; padding:20px; color:var(--ink-soft);}
+
+  /* ---------- BOTTOM TAB BAR (identik dengan Beranda) ---------- */
+  </style>
+
+<div class="hero">
+  <svg class="hero-illust" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="98" cy="40" r="26" fill="#F6BE3E"/>
+    <g stroke="#F6BE3E" stroke-width="4" stroke-linecap="round">
+      <line x1="98" y1="0" x2="98" y2="7"/>
+      <line x1="130" y1="10" x2="125" y2="15"/>
+      <line x1="136" y1="40" x2="129" y2="40"/>
+    </g>
+    <ellipse cx="55" cy="85" rx="42" ry="18" fill="rgba(255,255,255,0.20)"/>
+    <ellipse cx="20" cy="70" rx="22" ry="12" fill="rgba(255,255,255,0.14)"/>
+  </svg>
+  <svg class="hero-star" style="top:18px; left:60%; width:14px;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 0l2.5 8.5L23 11l-8.5 2.5L12 22l-2.5-8.5L1 11l8.5-2.5z" fill="#FFF3D9"/></svg>
+  <svg class="hero-star" style="top:60px; left:72%; width:9px;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 0l2.5 8.5L23 11l-8.5 2.5L12 22l-2.5-8.5L1 11l8.5-2.5z" fill="#FFF3D9"/></svg>
+  <div class="wrap">
+    <div class="hero-eyebrow">Yayasan Ar-Rahmah Sulawesi</div>
+    <h1 class="hero-title">Buku Saku Mitra Orang Tua 📖</h1>
+    <div class="hero-sub">Sinergi dalam amanah — panduan kode etik, komunikasi, hingga alur pengaduan.</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="section">
+    <div class="info-item">
+      <div class="info-dot"></div>
+      <div style="flex:1;">
+        <div class="info-judul">Bismillahirrohmanirrohim 🌙</div>
+        <p class="info-isi">Selamat datang di keluarga besar kami. Buku saku ini disusun sebagai panduan bagi Ayah &amp; Bunda demi terciptanya lingkungan belajar yang kondusif, religius, dan kolaboratif.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2 class="section-title">Topik Panduan</h2></div>
+    <div class="menu-grid" id="topikGrid"></div>
+  </section>
+
+  <section class="section">
+    <div class="closing-card">
+      <div class="emoji">🤲</div>
+      <p><strong>Doa Penutup —</strong> Semoga Allah SWT meridhoi setiap langkah kita mendidik generasi pemimpin yang religius, cerdas, kolaboratif, dan peduli lingkungan.</p>
+    </div>
+  </section>
+
+</div>
+
+<div id="modal">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-top">
+      <div class="modal-icon" id="modalIcon"></div>
+      <div>
+        <div class="modal-name" id="modalName"></div>
+        <span class="modal-tag" id="modalTag"></span>
+      </div>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script data-page-script>
+var SECTIONS = [
+  {
+    id:'etika', emoji:'🤝', card:'mc-etika', tag:'Kode Etik',
+    title:'Kode Etik &<br>Komitmen', sub:'6 poin komitmen bersama',
+    fullTitle:'Kode Etik & Komitmen Bersama',
+    intro:'Amanah pendidikan adalah tanggung jawab bersama. Berikut komitmen yang kami harap dijaga oleh Ayah & Bunda sekalian.',
+    type:'points',
+    items:[
+      {icon:'📋', h:'Kepatuhan terhadap Aturan', p:'Mematuhi dan menegakkan kebijakan, prosedur, dan kode etik sekolah, termasuk aturan seragam, kehadiran, dan kedisiplinan.'},
+      {icon:'🙌', h:'Dukungan Aktif', p:'Berkomitmen mendukung penerapan kebijakan sekolah secara aktif, bukan hanya sebagai penonton.'},
+      {icon:'✅', h:'Integritas Informasi', p:'Jujur menyampaikan informasi material — kesehatan, kebutuhan belajar, atau data keluarga — saat pendaftaran maupun selama masa pendidikan.'},
+      {icon:'🏫', h:'Menjaga Marwah Sekolah', p:'Bersama-sama menjaga nama baik sekolah di masyarakat dan media sosial dengan perilaku yang bijak dan santun.'},
+      {icon:'💳', h:'Tanggung Jawab Finansial', p:'Bertanggung jawab secara tanggung renteng untuk memenuhi kewajiban biaya sekolah tepat waktu sesuai jadwal.'},
+      {icon:'🧰', h:'Perawatan Fasilitas', p:'Bertanggung jawab atas kerusakan properti sekolah (bangunan, furnitur, peralatan) yang disebabkan oleh ananda.'},
+    ]
+  },
+  {
+    id:'komunikasi', emoji:'💬', card:'mc-komunikasi', tag:'Komunikasi',
+    title:'Adab<br>Berkomunikasi', sub:'Menjaga profesionalisme',
+    fullTitle:'Adab Berkomunikasi',
+    intro:'Komunikasi yang sehat antara rumah dan sekolah adalah fondasi kerja sama pendidikan ananda.',
+    type:'points',
+    items:[
+      {icon:'🎯', h:'Fokus pada Ananda', p:'Diskusi antara orang tua dan guru dibatasi pada hal-hal terkait perkembangan, pendidikan, dan kesejahteraan siswa di sekolah.'},
+      {icon:'🔒', h:'Privasi & Batasan', p:'Mohon tidak "curhat" mengenai masalah pribadi, rumah tangga, atau keluarga kepada guru — hubungan tetap dalam koridor profesional.'},
+      {icon:'⏰', h:'Jam Operasional Komunikasi', p:'Pesan grup WhatsApp atau pesan pribadi mengikuti jam operasional hingga pukul 21.00 WITA. Pesan setelah itu mohon menunggu hari kerja berikutnya.'},
+    ]
+  },
+  {
+    id:'pengaduan', emoji:'📢', card:'mc-pengaduan', tag:'Tabayyun',
+    title:'Langkah<br>Tabayyun', sub:'6 langkah pengaduan resmi',
+    fullTitle:'Langkah Tabayyun (Pengaduan)',
+    intro:'Jika ada perbedaan pandangan, ikuti alur berikut agar masalah terselesaikan secara baik dan procedural fairness terjaga.',
+    type:'steps',
+    items:[
+      {h:'Jalur Resmi', p:'Segala keluhan, masukan, atau kritik disampaikan melalui jalur resmi sekolah: Wali Kelas, Wakasis, atau surat resmi.'},
+      {h:'Etika Grup WhatsApp', p:'Dilarang membahas keluhan kebijakan maupun masalah personal siswa di grup WhatsApp atau media sosial tidak resmi.'},
+      {h:'Ketentuan Sanksi', p:'Bahwa orang tua/wali siswa memaklumi untuk tidak mempublikasikan permasalahan internal, keluhan kebijakan, atau masalah personal siswa di media sosial publik maupun grup WhatsApp yang tidak resmi. Sebagai institusi pendidikan yang menjunjung tinggi adab, pihak sekolah berhak melakukan langkah persuasif, mediasi, hingga tindakan administratif terukur'},
+      {h:'Laporan Formal', p:'Jika belum terselesaikan di Wali Kelas, sampaikan tertulis melalui jalur resmi — nomor admin sekolah, surat, atau aplikasi resmi.'},
+      {h:'Manajemen Profesional', p:'Sekolah mengelola setiap keluhan secara profesional, rahasia, dan mengedepankan keadilan prosedural bagi semua pihak.'},
+      {h:'Kerahasiaan Terjamin', p:'Kerahasiaan pelapor dijaga, termasuk bagi yang ingin menyampaikan keluhan secara anonim sesuai prosedur.'},
+    ]
+  },
+  {
+    id:'alur', emoji:'🧭', card:'mc-alur', tag:'Alur Kasus',
+    title:'Alur Penanganan<br>Kasus', sub:'3 tahap berjenjang',
+    fullTitle:'Alur Penanganan Kasus Siswa',
+    intro:'Mohon tidak langsung menghubungi Kepala Sekolah — ikuti jenjang berikut agar proses penyelesaian tetap sistematis.',
+    type:'stages',
+    items:[
+      {tag:'Tahap 1', h:'Wali Kelas', p:'Mitra utama Ayah & Bunda di sekolah. Semua hal terkait keseharian, akademik, maupun interaksi sosial ananda dikomunikasikan pertama kali ke sini.', color:'var(--sky)'},
+      {tag:'Tahap 2', h:'Wakil Kepala Sekolah Bidang Kesiswaan', p:'Jika belum terselesaikan atau masalah bersifat kompleks/berulang, kasus diteruskan ke Wakasis untuk dimediasi.', color:'var(--indigo)'},
+      {tag:'Tahap 3', h:'Kepala Sekolah', p:'Terlibat hanya untuk kasus yang telah melalui Wali Kelas & Wakasis namun belum mencapai mufakat atau butuh keputusan kebijakan.', color:'var(--gold)'},
+      {tag:'Tahap 4', h:'Portal Pengaduan', p:'Bila masih belum mendapatkan solusi, orang tua mengadukan melalui kanal resmi pengaduan.arrahmahsulawesi.org.', color:'var(--gold)'},
+    ],
+    note:'Catatan: mohon setiap kasus diselesaikan melalui mediasi sekolah berjenjang, meski melibatkan pihak yang dikenal dekat (mis. tetangga rumah).'
+  },
+  {
+    id:'kepercayaan', emoji:'🤲', card:'mc-kepercayaan', tag:'Kepercayaan',
+    title:'Menjaga Kepercayaan (Social Capital)', sub:'Fondasi kerja sama sekolah & keluarga',
+    fullTitle:'Menjaga Kepercayaan (Social Capital)',
+    intro:'Social capital — rasa percaya, kerja sama, dan saling menghargai — kami yakini sebagai fondasi membangun komunitas sekolah.',
+    type:'points',
+    items:[
+      {icon:'🕊️', h:'Musyawarah', p:'Setiap kasus diselesaikan dengan semangat kekeluargaan dan musyawarah.'},
+      {icon:'🤝', h:'Peran Orang Tua', p:'Keterlibatan sesuai jenjang di atas adalah bentuk nyata dukungan Ayah & Bunda terhadap sistem pendidikan yang kita bangun bersama.'},
+      {icon:'🌟', h:'Dampak Bersama', p:'Kelangsungan pendaftaran siswa bergantung pada terpeliharanya rasa percaya antara sekolah dan orang tua.'},
+    ]
+  },
+];
+
+function renderGrid(){
+  const grid = document.getElementById('topikGrid');
+  grid.innerHTML = SECTIONS.map((s,i) => `
+    <button class="menu-card ${s.card}" onclick="bukaTopik(${i})">
+      <span class="m-icon">${s.emoji}</span>
+      <span class="m-title">${s.title}</span>
+      <span class="m-sub">${s.sub}</span>
+    </button>
+  `).join('');
+}
+
+function bukaTopik(i){
+  const s = SECTIONS[i];
+  document.getElementById('modalIcon').textContent = s.emoji;
+  document.getElementById('modalName').textContent = s.fullTitle;
+  document.getElementById('modalTag').textContent = s.tag;
+
+  let html = `<div class="detail-intro">${s.intro}</div>`;
+
+  if(s.type === 'points'){
+    html += s.items.map(it => `
+      <div class="point-row">
+        <div class="point-icon">${it.icon}</div>
+        <div class="point-body"><h4>${it.h}</h4><p>${it.p}</p></div>
+      </div>`).join('');
+  } else if(s.type === 'steps'){
+    html += s.items.map((it,idx) => `
+      <div class="step-row">
+        <div class="step-num">${idx+1}</div>
+        <div class="step-body"><h4>${it.h}</h4><p>${it.p}</p></div>
+      </div>`).join('');
+  } else if(s.type === 'stages'){
+    html += s.items.map(it => `
+      <div class="stage-row">
+        <div class="stage-dot" style="background:${it.color};">●</div>
+        <div class="stage-body">
+          <div class="stage-tag">${it.tag}</div>
+          <h4>${it.h}</h4>
+          <p>${it.p}</p>
+        </div>
+      </div>`).join('');
+    if(s.note){
+      html += `<div class="stage-note"><span>📌</span><span>${s.note}</span></div>`;
+    }
+  }
+
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+
+document.getElementById('modalClose').addEventListener('click', () => document.getElementById('modal').classList.remove('show'));
+document.getElementById('modal').addEventListener('click', (e) => { if (e.target.id === 'modal') e.currentTarget.classList.remove('show'); });
+
+renderGrid();
+</script>
